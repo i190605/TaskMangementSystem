@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { Task, TaskPriority } from '../types/task';
+import type { Task, TaskPriority, TaskStatus } from '../types/task';
 import { textIncludesQuery } from '../utils/search';
 import { FilterSelect, type SelectOption } from './FilterSelect';
 import { SearchField } from './SearchField';
@@ -7,12 +7,20 @@ import { StatCard } from './StatCard';
 import { TaskTable } from './TaskTable';
 
 type PriorityFilter = 'All' | TaskPriority;
+type StatusFilter = 'All' | TaskStatus;
 
 const priorityOptions: SelectOption<PriorityFilter>[] = [
   { label: 'All priorities', value: 'All' },
   { label: 'High', value: 'High' },
   { label: 'Medium', value: 'Medium' },
   { label: 'Low', value: 'Low' },
+];
+
+const statusOptions: SelectOption<StatusFilter>[] = [
+  { label: 'All statuses', value: 'All' },
+  { label: 'Open', value: 'Open' },
+  { label: 'In Progress', value: 'In Progress' },
+  { label: 'Completed', value: 'Completed' },
 ];
 
 interface DashboardViewProps {
@@ -23,6 +31,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
   const [titleSearchTerm, setTitleSearchTerm] = useState('');
   const [customerSearchTerm, setCustomerSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
 
   const visibleTasks = useMemo(
     () =>
@@ -30,16 +39,18 @@ export function DashboardView({ tasks }: DashboardViewProps) {
         (task) =>
           textIncludesQuery(task.title, titleSearchTerm) &&
           textIncludesQuery(task.customerName, customerSearchTerm) &&
-          (priorityFilter === 'All' || task.priority === priorityFilter),
+          (priorityFilter === 'All' || task.priority === priorityFilter) &&
+          (statusFilter === 'All' || task.status === statusFilter),
       ),
-    [customerSearchTerm, priorityFilter, tasks, titleSearchTerm],
+    [customerSearchTerm, priorityFilter, statusFilter, tasks, titleSearchTerm],
   );
 
   const hasTitleSearch = titleSearchTerm.trim().length > 0;
   const hasCustomerSearch = customerSearchTerm.trim().length > 0;
   const hasPriorityFilter = priorityFilter !== 'All';
+  const hasStatusFilter = statusFilter !== 'All';
   const hasAnySearch = hasTitleSearch || hasCustomerSearch;
-  const hasAnyControl = hasAnySearch || hasPriorityFilter;
+  const hasAnyControl = hasAnySearch || hasPriorityFilter || hasStatusFilter;
   const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
   const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
   const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
@@ -52,6 +63,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
     setTitleSearchTerm('');
     setCustomerSearchTerm('');
     setPriorityFilter('All');
+    setStatusFilter('All');
   }
 
   return (
@@ -83,7 +95,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             <h2 id="search-heading">Search tasks</h2>
           </div>
           <p className="search-card__description">
-            Search by task title or customer name, then filter by priority to focus the queue around the work that matters most.
+            Search by task title or customer name, then filter by priority and status to focus the queue around the work that matters most.
           </p>
         </div>
 
@@ -113,6 +125,14 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             onChange={setPriorityFilter}
             options={priorityOptions}
             helperText="Filter urgent work without losing the current search context."
+          />
+          <FilterSelect
+            id="status-filter"
+            label="Status"
+            value={statusFilter}
+            onChange={setStatusFilter}
+            options={statusOptions}
+            helperText="Focus on work by lifecycle stage."
           />
         </div>
 
