@@ -29,6 +29,12 @@ Selecting a task from the work queue displays its full description, customer inf
 
 Users can create a new local task with title, description, priority, due date, and assignee. Newly created tasks start in the Open status and appear at the top of the queue.
 
+## Data source
+
+**Selected option: C — local JSON data.**
+
+Seed tasks live in `src/data/tasks.json` and are adapted through `src/data/tasks.ts` so the UI still receives typed `Task` objects. This keeps the project deterministic, fast to review, and independent from external API availability while the product workflow is still being shaped.
+
 ## Tech stack
 
 - React for composing dashboard UI

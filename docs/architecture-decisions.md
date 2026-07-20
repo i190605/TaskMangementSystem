@@ -10,15 +10,21 @@
 - TypeScript keeps task fields such as priority and status constrained to supported values.
 - Vite provides a small, fast setup without requiring a larger full-stack framework before backend needs are defined.
 
-## ADR 002: Model dashboard data before introducing APIs
+## ADR 002: Use local JSON data before introducing APIs
 
-**Decision:** Store the first task list in typed local fixture data under `src/data/tasks.ts`.
+**Decision:** Use **Option C — local JSON data**. Store seed tasks in `src/data/tasks.json` and expose typed task objects through `src/data/tasks.ts`.
 
 **Why:**
 
 - The requested milestone is a dashboard view, not persistence or backend integration.
-- Local typed data lets us build and validate UI atoms before committing to an API contract.
+- Local JSON keeps the app deterministic, fast to run, and reviewable without network dependencies.
+- A small typed adapter keeps priority and status aligned with the TypeScript domain model.
 - Future steps can replace the fixture data with a repository/service layer while keeping UI components stable.
+
+**Tradeoffs:**
+
+- Local JSON does not provide cross-device persistence or multi-user collaboration.
+- Created tasks currently live in browser memory only; backend persistence should be added when API requirements are defined.
 
 ## ADR 003: Build reusable dashboard atoms first
 
