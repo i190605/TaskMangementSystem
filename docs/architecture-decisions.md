@@ -95,3 +95,13 @@
 - The project does not have a backend/API contract yet, so local creation validates the product workflow without inventing persistence details.
 - New tasks default to `Open`, which matches a natural intake workflow.
 - Customer data is intentionally marked as unassigned for created tasks because customer selection is not part of this milestone.
+
+## ADR 009: Track product thinking as a first-class project artifact
+
+**Decision:** Maintain non-functional expectations, personas, assumptions, state handling, and workflow tradeoffs in `docs/product-thinking.md`.
+
+**Why:**
+
+- The dashboard is intended to evolve step by step, so product assumptions must be visible and revisited as requirements grow.
+- Non-functional expectations such as accessibility, empty states, error handling, and onboarding directly affect usability for hundreds of customers.
+- Keeping product reasoning in version control makes future implementation decisions easier to review and challenge.

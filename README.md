@@ -41,6 +41,10 @@ Users can create a new local task with title, description, priority, due date, a
 
 Seed tasks live in `src/data/tasks.json` and are adapted through `src/data/tasks.ts` so the UI still receives typed `Task` objects. This gives us realistic dashboard data now while preserving a clear migration path to a backend/service layer later.
 
+## Product thinking and assumptions
+
+Non-functional expectations, workflow assumptions, user personas, state handling, and future product decisions are documented in [`docs/product-thinking.md`](docs/product-thinking.md).
+
 ## Tech stack
 
 - React for composing dashboard UI
