@@ -1,9 +1,19 @@
 import { useMemo, useState } from 'react';
-import type { Task } from '../types/task';
+import type { Task, TaskPriority } from '../types/task';
 import { textIncludesQuery } from '../utils/search';
+import { FilterSelect, type SelectOption } from './FilterSelect';
 import { SearchField } from './SearchField';
 import { StatCard } from './StatCard';
 import { TaskTable } from './TaskTable';
+
+type PriorityFilter = 'All' | TaskPriority;
+
+const priorityOptions: SelectOption<PriorityFilter>[] = [
+  { label: 'All priorities', value: 'All' },
+  { label: 'High', value: 'High' },
+  { label: 'Medium', value: 'Medium' },
+  { label: 'Low', value: 'Low' },
+];
 
 interface DashboardViewProps {
   tasks: Task[];
@@ -12,31 +22,36 @@ interface DashboardViewProps {
 export function DashboardView({ tasks }: DashboardViewProps) {
   const [titleSearchTerm, setTitleSearchTerm] = useState('');
   const [customerSearchTerm, setCustomerSearchTerm] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
 
   const visibleTasks = useMemo(
     () =>
       tasks.filter(
         (task) =>
           textIncludesQuery(task.title, titleSearchTerm) &&
-          textIncludesQuery(task.customerName, customerSearchTerm),
+          textIncludesQuery(task.customerName, customerSearchTerm) &&
+          (priorityFilter === 'All' || task.priority === priorityFilter),
       ),
-    [customerSearchTerm, tasks, titleSearchTerm],
+    [customerSearchTerm, priorityFilter, tasks, titleSearchTerm],
   );
 
   const hasTitleSearch = titleSearchTerm.trim().length > 0;
   const hasCustomerSearch = customerSearchTerm.trim().length > 0;
+  const hasPriorityFilter = priorityFilter !== 'All';
   const hasAnySearch = hasTitleSearch || hasCustomerSearch;
+  const hasAnyControl = hasAnySearch || hasPriorityFilter;
   const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
   const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
   const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
   const highPriorityTasks = tasks.filter((task) => task.priority === 'High').length;
-  const searchResultSummary = hasAnySearch
-    ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching your search.`
+  const searchResultSummary = hasAnyControl
+    ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching your search and filters.`
     : `Showing all ${tasks.length} tasks.`;
 
-  function clearSearch() {
+  function clearControls() {
     setTitleSearchTerm('');
     setCustomerSearchTerm('');
+    setPriorityFilter('All');
   }
 
   return (
@@ -68,7 +83,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             <h2 id="search-heading">Search tasks</h2>
           </div>
           <p className="search-card__description">
-            Search by task title or customer name to quickly locate the work item a customer or teammate is asking about.
+            Search by task title or customer name, then filter by priority to focus the queue around the work that matters most.
           </p>
         </div>
 
@@ -91,6 +106,14 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             helperText="Combine with task-title search to narrow the queue."
             clearLabel="Clear customer name search"
           />
+          <FilterSelect
+            id="priority-filter"
+            label="Priority"
+            value={priorityFilter}
+            onChange={setPriorityFilter}
+            options={priorityOptions}
+            helperText="Filter urgent work without losing the current search context."
+          />
         </div>
 
         <p className="search-card__results" aria-live="polite">
@@ -102,14 +125,14 @@ export function DashboardView({ tasks }: DashboardViewProps) {
         tasks={visibleTasks}
         emptyStateTitle="No matching tasks"
         emptyStateDescription={
-          hasAnySearch
-            ? 'No tasks match the current title and customer search. Try a broader keyword or clear one of the fields.'
+          hasAnyControl
+            ? 'No tasks match the current search and filters. Try a broader keyword or clear one of the controls.'
             : 'No tasks have been added yet.'
         }
         emptyStateAction={
-          hasAnySearch ? (
-            <button className="secondary-button" type="button" onClick={clearSearch}>
-              Clear search
+          hasAnyControl ? (
+            <button className="secondary-button" type="button" onClick={clearControls}>
+              Clear search and filters
             </button>
           ) : undefined
         }

@@ -50,3 +50,13 @@
 - Search is case-insensitive and accent-tolerant through a shared normalization utility.
 - Multiple search fields compose with `AND` logic so operators can progressively narrow large queues.
 - The results count uses `aria-live` and the empty state provides a clear recovery action for keyboard and screen-reader users.
+
+## ADR 006: Add filters as composable dashboard controls
+
+**Decision:** Implement priority filtering with a reusable `FilterSelect` component and compose it with existing search predicates.
+
+**Why:**
+
+- A reusable select control gives future filters a consistent accessible structure.
+- Priority filtering is applied alongside search with predictable `AND` logic.
+- Keeping filtering local is appropriate while the dashboard uses local fixture data and keeps the interaction instant.

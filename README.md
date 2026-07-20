@@ -17,6 +17,10 @@ This first commit establishes the dashboard building blocks and a static dashboa
 
 The dashboard supports instant search by task title and customer name so operators can quickly locate work items without scanning the full queue.
 
+## Filtering
+
+The dashboard supports priority filtering to help teams focus high-urgency work while preserving their current search context.
+
 ## Tech stack
 
 - React for composing dashboard UI
