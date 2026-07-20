@@ -21,6 +21,10 @@ The dashboard supports instant search by task title and customer name so operato
 
 The dashboard supports priority, status, and assignee filtering to help teams focus high-urgency work, lifecycle stages, and ownership while preserving their current search context.
 
+## Task details
+
+Selecting a task from the work queue displays its full description, customer information, priority, status, due date, and assignee in a dedicated details panel.
+
 ## Tech stack
 
 - React for composing dashboard UI

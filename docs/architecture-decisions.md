@@ -61,3 +61,13 @@
 - Priority, status, and assignee filtering are applied alongside search with predictable `AND` logic.
 - Assignee options are derived from task data so ownership filters stay current as the task list changes.
 - Keeping filtering local is appropriate while the dashboard uses local fixture data and keeps the interaction instant.
+
+## ADR 007: Keep task details contextual to the dashboard
+
+**Decision:** Display selected task details in a persistent side panel instead of navigating away from the dashboard.
+
+**Why:**
+
+- Operators can inspect a task without losing search/filter context.
+- The task table remains focused on scanning while the details panel owns richer customer and description content.
+- Selection is handled through accessible buttons so keyboard and screen-reader users can open details predictably.

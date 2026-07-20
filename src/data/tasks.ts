@@ -4,7 +4,14 @@ export const tasks: Task[] = [
   {
     id: 'task-001',
     title: 'Prepare onboarding checklist',
+    description:
+      'Create a launch-ready onboarding checklist that covers kickoff ownership, implementation milestones, enablement sessions, and success criteria for the first 30 days.',
     customerName: 'Acme Manufacturing',
+    customer: {
+      contactName: 'Fatima Raza',
+      email: 'fatima.raza@acme.example',
+      accountTier: 'Enterprise',
+    },
     priority: 'High',
     status: 'Open',
     dueDate: '2026-07-24',
@@ -13,7 +20,14 @@ export const tasks: Task[] = [
   {
     id: 'task-002',
     title: 'Review quarterly service report',
+    description:
+      'Audit the quarterly service report, validate SLA notes, and prepare an executive summary for the customer success review meeting.',
     customerName: 'Northwind Traders',
+    customer: {
+      contactName: 'Omar Sheikh',
+      email: 'omar.sheikh@northwind.example',
+      accountTier: 'Mid-market',
+    },
     priority: 'Medium',
     status: 'In Progress',
     dueDate: '2026-07-28',
@@ -22,7 +36,14 @@ export const tasks: Task[] = [
   {
     id: 'task-003',
     title: 'Resolve invoice approval blocker',
+    description:
+      'Coordinate with finance and operations to remove the invoice approval blocker that is delaying the customer renewal workflow.',
     customerName: 'BluePeak Logistics',
+    customer: {
+      contactName: 'Mariam Iqbal',
+      email: 'mariam.iqbal@bluepeak.example',
+      accountTier: 'Enterprise',
+    },
     priority: 'High',
     status: 'In Progress',
     dueDate: '2026-07-22',
@@ -31,7 +52,14 @@ export const tasks: Task[] = [
   {
     id: 'task-004',
     title: 'Confirm rollout timeline',
+    description:
+      'Confirm final rollout dates, stakeholder availability, and communication checkpoints before marking the implementation plan complete.',
     customerName: 'Contoso Retail',
+    customer: {
+      contactName: 'Danish Ali',
+      email: 'danish.ali@contoso.example',
+      accountTier: 'SMB',
+    },
     priority: 'Low',
     status: 'Completed',
     dueDate: '2026-07-20',
@@ -40,7 +68,14 @@ export const tasks: Task[] = [
   {
     id: 'task-005',
     title: 'Update customer success notes',
+    description:
+      'Capture the latest customer health signals, open risks, and next-step commitments so the account team has a reliable operating record.',
     customerName: 'Globex Services',
+    customer: {
+      contactName: 'Hina Siddiqui',
+      email: 'hina.siddiqui@globex.example',
+      accountTier: 'Mid-market',
+    },
     priority: 'Medium',
     status: 'Open',
     dueDate: '2026-07-31',

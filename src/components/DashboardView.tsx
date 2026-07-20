@@ -4,6 +4,7 @@ import { textIncludesQuery } from '../utils/search';
 import { FilterSelect, type SelectOption } from './FilterSelect';
 import { SearchField } from './SearchField';
 import { StatCard } from './StatCard';
+import { TaskDetailsPanel } from './TaskDetailsPanel';
 import { TaskTable } from './TaskTable';
 
 type PriorityFilter = 'All' | TaskPriority;
@@ -32,6 +33,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
   const [customerSearchTerm, setCustomerSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(tasks[0]?.id ?? null);
 
   const assigneeOptions = useMemo<SelectOption<string>[]>(() => {
     const uniqueAssignees = Array.from(new Set(tasks.map((task) => task.assignee))).sort((first, second) =>
@@ -73,6 +75,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
   const searchResultSummary = hasAnyControl
     ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching your search and filters.`
     : `Showing all ${tasks.length} tasks.`;
+  const selectedTask = visibleTasks.find((task) => task.id === selectedTaskId) ?? visibleTasks[0] ?? null;
 
   function clearControls() {
     setTitleSearchTerm('');
@@ -165,22 +168,28 @@ export function DashboardView({ tasks }: DashboardViewProps) {
         </p>
       </section>
 
-      <TaskTable
-        tasks={visibleTasks}
-        emptyStateTitle="No matching tasks"
-        emptyStateDescription={
-          hasAnyControl
-            ? 'No tasks match the current search and filters. Try a broader keyword or clear one of the controls.'
-            : 'No tasks have been added yet.'
-        }
-        emptyStateAction={
-          hasAnyControl ? (
-            <button className="secondary-button" type="button" onClick={clearControls}>
-              Clear search and filters
-            </button>
-          ) : undefined
-        }
-      />
+      <section className="work-area" aria-label="Task work area">
+        <TaskTable
+          tasks={visibleTasks}
+          selectedTaskId={selectedTask?.id}
+          onSelectTask={setSelectedTaskId}
+          emptyStateTitle="No matching tasks"
+          emptyStateDescription={
+            hasAnyControl
+              ? 'No tasks match the current search and filters. Try a broader keyword or clear one of the controls.'
+              : 'No tasks have been added yet.'
+          }
+          emptyStateAction={
+            hasAnyControl ? (
+              <button className="secondary-button" type="button" onClick={clearControls}>
+                Clear search and filters
+              </button>
+            ) : undefined
+          }
+        />
+
+        <TaskDetailsPanel task={selectedTask} />
+      </section>
     </main>
   );
 }

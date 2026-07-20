@@ -1,22 +1,26 @@
 import type { ReactNode } from 'react';
 import type { Task } from '../types/task';
+import { formatDisplayDate } from '../utils/date';
 import { Badge } from './Badge';
 import { priorityTone, statusTone } from './badgeTones';
 
 interface TaskTableProps {
   tasks: Task[];
+  selectedTaskId?: string;
+  onSelectTask?: (taskId: string) => void;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateAction?: ReactNode;
 }
 
-const dateFormatter = new Intl.DateTimeFormat('en', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
-
-export function TaskTable({ tasks, emptyStateTitle, emptyStateDescription, emptyStateAction }: TaskTableProps) {
+export function TaskTable({
+  tasks,
+  selectedTaskId,
+  onSelectTask,
+  emptyStateTitle,
+  emptyStateDescription,
+  emptyStateAction,
+}: TaskTableProps) {
   const recordLabel = `${tasks.length} ${tasks.length === 1 ? 'record' : 'records'}`;
 
   return (
@@ -43,22 +47,39 @@ export function TaskTable({ tasks, emptyStateTitle, emptyStateDescription, empty
           </thead>
           <tbody>
             {tasks.length > 0 ? (
-              tasks.map((task) => (
-                <tr key={task.id}>
-                  <td data-label="Task title">
-                    <strong>{task.title}</strong>
-                  </td>
-                  <td data-label="Customer name">{task.customerName}</td>
-                  <td data-label="Priority">
-                    <Badge tone={priorityTone[task.priority]}>{task.priority}</Badge>
-                  </td>
-                  <td data-label="Status">
-                    <Badge tone={statusTone[task.status]}>{task.status}</Badge>
-                  </td>
-                  <td data-label="Due date">{dateFormatter.format(new Date(task.dueDate))}</td>
-                  <td data-label="Assignee">{task.assignee}</td>
-                </tr>
-              ))
+              tasks.map((task) => {
+                const isSelected = task.id === selectedTaskId;
+
+                return (
+                  <tr className={isSelected ? 'task-row task-row--selected' : 'task-row'} key={task.id}>
+                    <td data-label="Task title">
+                      {onSelectTask ? (
+                        <button
+                          aria-controls="task-detail-panel"
+                          aria-label={`View details for ${task.title}`}
+                          aria-pressed={isSelected}
+                          className="task-title-button"
+                          type="button"
+                          onClick={() => onSelectTask(task.id)}
+                        >
+                          <strong>{task.title}</strong>
+                        </button>
+                      ) : (
+                        <strong>{task.title}</strong>
+                      )}
+                    </td>
+                    <td data-label="Customer name">{task.customerName}</td>
+                    <td data-label="Priority">
+                      <Badge tone={priorityTone[task.priority]}>{task.priority}</Badge>
+                    </td>
+                    <td data-label="Status">
+                      <Badge tone={statusTone[task.status]}>{task.status}</Badge>
+                    </td>
+                    <td data-label="Due date">{formatDisplayDate(task.dueDate)}</td>
+                    <td data-label="Assignee">{task.assignee}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={6}>
