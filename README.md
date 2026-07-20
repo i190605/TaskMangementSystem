@@ -13,6 +13,10 @@ This first commit establishes the dashboard building blocks and a static dashboa
 - Due date
 - Assignee
 
+## Search
+
+The dashboard supports instant task-title search so operators can quickly locate work items without scanning the full queue.
+
 ## Tech stack
 
 - React for composing dashboard UI

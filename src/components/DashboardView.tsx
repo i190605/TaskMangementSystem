@@ -1,4 +1,7 @@
+import { useMemo, useState } from 'react';
 import type { Task } from '../types/task';
+import { textIncludesQuery } from '../utils/search';
+import { SearchField } from './SearchField';
 import { StatCard } from './StatCard';
 import { TaskTable } from './TaskTable';
 
@@ -7,10 +10,21 @@ interface DashboardViewProps {
 }
 
 export function DashboardView({ tasks }: DashboardViewProps) {
-  const openTasks = tasks.filter((task) => task.status === 'Open').length;
-  const inProgressTasks = tasks.filter((task) => task.status === 'In Progress').length;
-  const completedTasks = tasks.filter((task) => task.status === 'Completed').length;
+  const [titleSearchTerm, setTitleSearchTerm] = useState('');
+
+  const visibleTasks = useMemo(
+    () => tasks.filter((task) => textIncludesQuery(task.title, titleSearchTerm)),
+    [tasks, titleSearchTerm],
+  );
+
+  const hasTitleSearch = titleSearchTerm.trim().length > 0;
+  const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
+  const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
+  const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
   const highPriorityTasks = tasks.filter((task) => task.priority === 'High').length;
+  const searchResultSummary = hasTitleSearch
+    ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching the title search.`
+    : `Showing all ${tasks.length} tasks.`;
 
   return (
     <main className="dashboard-shell">
@@ -34,7 +48,50 @@ export function DashboardView({ tasks }: DashboardViewProps) {
         <StatCard label="Completed" value={completedTasks} helper="Closed successfully" />
       </section>
 
-      <TaskTable tasks={tasks} />
+      <section className="search-card" aria-labelledby="search-heading">
+        <div className="search-card__header">
+          <div>
+            <p className="eyebrow">Find work faster</p>
+            <h2 id="search-heading">Search tasks</h2>
+          </div>
+          <p className="search-card__description">
+            Search by task title to quickly locate the work item a customer or teammate is asking about.
+          </p>
+        </div>
+
+        <div className="search-card__fields">
+          <SearchField
+            id="task-title-search"
+            label="Task title"
+            value={titleSearchTerm}
+            onChange={setTitleSearchTerm}
+            placeholder="Search task titles..."
+            helperText="Matches are case-insensitive and update instantly."
+            clearLabel="Clear task title search"
+          />
+        </div>
+
+        <p className="search-card__results" aria-live="polite">
+          {searchResultSummary}
+        </p>
+      </section>
+
+      <TaskTable
+        tasks={visibleTasks}
+        emptyStateTitle="No matching task titles"
+        emptyStateDescription={
+          hasTitleSearch
+            ? `No task title matches “${titleSearchTerm.trim()}”. Try a broader keyword.`
+            : 'No tasks have been added yet.'
+        }
+        emptyStateAction={
+          hasTitleSearch ? (
+            <button className="secondary-button" type="button" onClick={() => setTitleSearchTerm('')}>
+              Clear title search
+            </button>
+          ) : undefined
+        }
+      />
     </main>
   );
 }

@@ -39,3 +39,13 @@
 - It keeps the initial project simple and easy to inspect.
 - It avoids locking the project into a design system before dashboard requirements mature.
 - Component class names still create clear extension points for future styling improvements.
+
+## ADR 005: Make search local, instant, and accessible first
+
+**Decision:** Implement task-title search as a controlled React input with local filtering.
+
+**Why:**
+
+- The current dashboard data is local, so local filtering keeps the interaction fast and dependency-free.
+- Search is case-insensitive and accent-tolerant through a shared normalization utility.
+- The results count uses `aria-live` and the empty state provides a clear recovery action for keyboard and screen-reader users.
