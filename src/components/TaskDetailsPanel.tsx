@@ -46,13 +46,11 @@ export function TaskDetailsPanel({ task }: TaskDetailsPanelProps) {
         </div>
         <div>
           <dt>Customer email</dt>
-          <dd>
-            <a href={`mailto:${task.customer.email}`}>{task.customer.email}</a>
-          </dd>
+          <dd>{task.customer.email ? <a href={`mailto:${task.customer.email}`}>{task.customer.email}</a> : 'Not provided'}</dd>
         </div>
         <div>
           <dt>Account tier</dt>
-          <dd>{task.customer.accountTier}</dd>
+          <dd>{task.customer.accountTier ?? 'Not assigned'}</dd>
         </div>
         <div>
           <dt>Due date</dt>

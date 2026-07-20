@@ -25,6 +25,10 @@ The dashboard supports priority, status, and assignee filtering to help teams fo
 
 Selecting a task from the work queue displays its full description, customer information, priority, status, due date, and assignee in a dedicated details panel.
 
+## Create task
+
+Users can create a new local task with title, description, priority, due date, and assignee. Newly created tasks start in the Open status and appear at the top of the queue.
+
 ## Tech stack
 
 - React for composing dashboard UI

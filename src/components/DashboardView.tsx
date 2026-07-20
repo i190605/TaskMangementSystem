@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
-import type { Task, TaskPriority, TaskStatus } from '../types/task';
+import type { CreateTaskInput, Task, TaskPriority, TaskStatus } from '../types/task';
 import { textIncludesQuery } from '../utils/search';
 import { FilterSelect, type SelectOption } from './FilterSelect';
 import { SearchField } from './SearchField';
 import { StatCard } from './StatCard';
+import { TaskCreateForm } from './TaskCreateForm';
 import { TaskDetailsPanel } from './TaskDetailsPanel';
 import { TaskTable } from './TaskTable';
 
@@ -26,9 +27,10 @@ const statusOptions: SelectOption<StatusFilter>[] = [
 
 interface DashboardViewProps {
   tasks: Task[];
+  onCreateTask: (input: CreateTaskInput) => Task;
 }
 
-export function DashboardView({ tasks }: DashboardViewProps) {
+export function DashboardView({ tasks, onCreateTask }: DashboardViewProps) {
   const [titleSearchTerm, setTitleSearchTerm] = useState('');
   const [customerSearchTerm, setCustomerSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
@@ -85,6 +87,13 @@ export function DashboardView({ tasks }: DashboardViewProps) {
     setAssigneeFilter('All');
   }
 
+  function handleCreateTask(input: CreateTaskInput) {
+    const task = onCreateTask(input);
+
+    clearControls();
+    setSelectedTaskId(task.id);
+  }
+
   return (
     <main className="dashboard-shell">
       <section className="hero-card" aria-labelledby="dashboard-title">
@@ -106,6 +115,8 @@ export function DashboardView({ tasks }: DashboardViewProps) {
         <StatCard label="In Progress" value={inProgressTasks} helper="Currently being handled" />
         <StatCard label="Completed" value={completedTasks} helper="Closed successfully" />
       </section>
+
+      <TaskCreateForm onCreateTask={handleCreateTask} />
 
       <section className="search-card" aria-labelledby="search-heading">
         <div className="search-card__header">

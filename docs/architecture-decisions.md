@@ -71,3 +71,13 @@
 - Operators can inspect a task without losing search/filter context.
 - The task table remains focused on scanning while the details panel owns richer customer and description content.
 - Selection is handled through accessible buttons so keyboard and screen-reader users can open details predictably.
+
+## ADR 008: Create tasks locally until persistence is defined
+
+**Decision:** Add task creation with local React state and the requested minimum fields: title, description, priority, due date, and assignee.
+
+**Why:**
+
+- The project does not have a backend/API contract yet, so local creation validates the product workflow without inventing persistence details.
+- New tasks default to `Open`, which matches a natural intake workflow.
+- Customer data is intentionally marked as unassigned for created tasks because customer selection is not part of this milestone.
