@@ -11,20 +11,33 @@ interface DashboardViewProps {
 
 export function DashboardView({ tasks }: DashboardViewProps) {
   const [titleSearchTerm, setTitleSearchTerm] = useState('');
+  const [customerSearchTerm, setCustomerSearchTerm] = useState('');
 
   const visibleTasks = useMemo(
-    () => tasks.filter((task) => textIncludesQuery(task.title, titleSearchTerm)),
-    [tasks, titleSearchTerm],
+    () =>
+      tasks.filter(
+        (task) =>
+          textIncludesQuery(task.title, titleSearchTerm) &&
+          textIncludesQuery(task.customerName, customerSearchTerm),
+      ),
+    [customerSearchTerm, tasks, titleSearchTerm],
   );
 
   const hasTitleSearch = titleSearchTerm.trim().length > 0;
+  const hasCustomerSearch = customerSearchTerm.trim().length > 0;
+  const hasAnySearch = hasTitleSearch || hasCustomerSearch;
   const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
   const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
   const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
   const highPriorityTasks = tasks.filter((task) => task.priority === 'High').length;
-  const searchResultSummary = hasTitleSearch
-    ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching the title search.`
+  const searchResultSummary = hasAnySearch
+    ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching your search.`
     : `Showing all ${tasks.length} tasks.`;
+
+  function clearSearch() {
+    setTitleSearchTerm('');
+    setCustomerSearchTerm('');
+  }
 
   return (
     <main className="dashboard-shell">
@@ -55,7 +68,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             <h2 id="search-heading">Search tasks</h2>
           </div>
           <p className="search-card__description">
-            Search by task title to quickly locate the work item a customer or teammate is asking about.
+            Search by task title or customer name to quickly locate the work item a customer or teammate is asking about.
           </p>
         </div>
 
@@ -69,6 +82,15 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             helperText="Matches are case-insensitive and update instantly."
             clearLabel="Clear task title search"
           />
+          <SearchField
+            id="customer-name-search"
+            label="Customer name"
+            value={customerSearchTerm}
+            onChange={setCustomerSearchTerm}
+            placeholder="Search customer names..."
+            helperText="Combine with task-title search to narrow the queue."
+            clearLabel="Clear customer name search"
+          />
         </div>
 
         <p className="search-card__results" aria-live="polite">
@@ -78,16 +100,16 @@ export function DashboardView({ tasks }: DashboardViewProps) {
 
       <TaskTable
         tasks={visibleTasks}
-        emptyStateTitle="No matching task titles"
+        emptyStateTitle="No matching tasks"
         emptyStateDescription={
-          hasTitleSearch
-            ? `No task title matches “${titleSearchTerm.trim()}”. Try a broader keyword.`
+          hasAnySearch
+            ? 'No tasks match the current title and customer search. Try a broader keyword or clear one of the fields.'
             : 'No tasks have been added yet.'
         }
         emptyStateAction={
-          hasTitleSearch ? (
-            <button className="secondary-button" type="button" onClick={() => setTitleSearchTerm('')}>
-              Clear title search
+          hasAnySearch ? (
+            <button className="secondary-button" type="button" onClick={clearSearch}>
+              Clear search
             </button>
           ) : undefined
         }

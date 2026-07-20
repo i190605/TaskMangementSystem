@@ -15,7 +15,7 @@ This first commit establishes the dashboard building blocks and a static dashboa
 
 ## Search
 
-The dashboard supports instant task-title search so operators can quickly locate work items without scanning the full queue.
+The dashboard supports instant search by task title and customer name so operators can quickly locate work items without scanning the full queue.
 
 ## Tech stack
 

@@ -42,10 +42,11 @@
 
 ## ADR 005: Make search local, instant, and accessible first
 
-**Decision:** Implement task-title search as a controlled React input with local filtering.
+**Decision:** Implement task-title and customer-name search as controlled React inputs with local filtering.
 
 **Why:**
 
 - The current dashboard data is local, so local filtering keeps the interaction fast and dependency-free.
 - Search is case-insensitive and accent-tolerant through a shared normalization utility.
+- Multiple search fields compose with `AND` logic so operators can progressively narrow large queues.
 - The results count uses `aria-live` and the empty state provides a clear recovery action for keyboard and screen-reader users.
