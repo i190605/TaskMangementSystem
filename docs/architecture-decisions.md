@@ -105,3 +105,13 @@
 - The dashboard is intended to evolve step by step, so product assumptions must be visible and revisited as requirements grow.
 - Non-functional expectations such as accessibility, empty states, error handling, and onboarding directly affect usability for hundreds of customers.
 - Keeping product reasoning in version control makes future implementation decisions easier to review and challenge.
+
+## ADR 010: Treat form recovery and microinteractions as product requirements
+
+**Decision:** Improve the create-task workflow with inline validation, helper text, success/error feedback, draft clearing confirmation, and documented UX interaction principles.
+
+**Why:**
+
+- Task intake quality affects every downstream workflow, so validation should guide users instead of only rejecting bad input.
+- Confirmation is reserved for possible data loss, such as clearing an unsaved draft, to avoid unnecessary friction.
+- Documenting interaction design in `docs/ux-interaction-design.md` keeps UX decisions explicit for future iterations.

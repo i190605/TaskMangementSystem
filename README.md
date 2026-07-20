@@ -45,6 +45,8 @@ Seed tasks live in `src/data/tasks.json` and are adapted through `src/data/tasks
 
 Non-functional expectations, workflow assumptions, user personas, state handling, and future product decisions are documented in [`docs/product-thinking.md`](docs/product-thinking.md).
 
+UX information architecture, interaction design, form behavior, and microinteraction decisions are documented in [`docs/ux-interaction-design.md`](docs/ux-interaction-design.md).
+
 ## Tech stack
 
 - React for composing dashboard UI

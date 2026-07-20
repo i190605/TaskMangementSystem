@@ -77,6 +77,8 @@ These are intentionally not implemented yet but should be decided before product
 - Focus-visible styles are provided for interactive controls.
 - Responsive table behavior keeps the task queue usable on smaller screens.
 
+Detailed UX and interaction design decisions are documented in [`ux-interaction-design.md`](ux-interaction-design.md).
+
 ## Performance and scalability expectations
 
 - Current filtering is in-memory and suitable for the local JSON data set and early product validation.
