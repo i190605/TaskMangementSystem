@@ -28,9 +28,10 @@ const statusOptions: SelectOption<StatusFilter>[] = [
 interface DashboardViewProps {
   tasks: Task[];
   onCreateTask: (input: CreateTaskInput) => Task;
+  onUpdateTaskStatus: (taskId: string, status: TaskStatus) => void;
 }
 
-export function DashboardView({ tasks, onCreateTask }: DashboardViewProps) {
+export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: DashboardViewProps) {
   const [titleSearchTerm, setTitleSearchTerm] = useState('');
   const [customerSearchTerm, setCustomerSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
@@ -199,7 +200,7 @@ export function DashboardView({ tasks, onCreateTask }: DashboardViewProps) {
           }
         />
 
-        <TaskDetailsPanel task={selectedTask} />
+        <TaskDetailsPanel task={selectedTask} onUpdateStatus={onUpdateTaskStatus} />
       </section>
     </main>
   );

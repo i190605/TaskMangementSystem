@@ -556,6 +556,47 @@ td strong {
   line-height: 1.75;
 }
 
+.details-panel__status-control {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  border: 1px solid #d7e0ee;
+  border-radius: 18px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.details-panel__status-control label {
+  color: #172033;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.details-panel__status-control select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #d7e0ee;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #172033;
+  cursor: pointer;
+  outline: 0;
+  padding: 0 12px;
+}
+
+.details-panel__status-control select:focus {
+  border-color: #4f63d8;
+  box-shadow: 0 0 0 4px rgba(79, 99, 216, 0.14);
+}
+
+.details-panel__status-control p {
+  color: #15803d;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 .details-list {
   display: grid;
   gap: 14px;

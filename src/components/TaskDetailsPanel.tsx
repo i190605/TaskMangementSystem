@@ -1,13 +1,19 @@
-import type { Task } from '../types/task';
+import { useState } from 'react';
+import type { Task, TaskStatus } from '../types/task';
 import { formatDisplayDate } from '../utils/date';
 import { Badge } from './Badge';
 import { priorityTone, statusTone } from './badgeTones';
 
+const statusOptions: TaskStatus[] = ['Open', 'In Progress', 'Completed'];
+
 interface TaskDetailsPanelProps {
   task: Task | null;
+  onUpdateStatus?: (taskId: string, status: TaskStatus) => void;
 }
 
-export function TaskDetailsPanel({ task }: TaskDetailsPanelProps) {
+export function TaskDetailsPanel({ task, onUpdateStatus }: TaskDetailsPanelProps) {
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
   if (!task) {
     return (
       <aside className="details-panel" id="task-detail-panel" aria-labelledby="task-detail-heading">
@@ -18,6 +24,15 @@ export function TaskDetailsPanel({ task }: TaskDetailsPanelProps) {
         </p>
       </aside>
     );
+  }
+
+  function handleStatusChange(status: TaskStatus) {
+    if (!task || !onUpdateStatus) {
+      return;
+    }
+
+    onUpdateStatus(task.id, status);
+    setFeedbackMessage(`Status updated to ${status}.`);
   }
 
   return (
@@ -34,6 +49,24 @@ export function TaskDetailsPanel({ task }: TaskDetailsPanelProps) {
       </div>
 
       <p className="details-panel__description">{task.description}</p>
+
+      {onUpdateStatus ? (
+        <div className="details-panel__status-control">
+          <label htmlFor={`status-update-${task.id}`}>Update status</label>
+          <select
+            id={`status-update-${task.id}`}
+            value={task.status}
+            onChange={(event) => handleStatusChange(event.target.value as TaskStatus)}
+          >
+            {statusOptions.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+          <p aria-live="polite">{feedbackMessage}</p>
+        </div>
+      ) : null}
 
       <dl className="details-list">
         <div>

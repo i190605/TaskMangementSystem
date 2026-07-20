@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DashboardView } from './components/DashboardView';
 import { tasks as initialTasks } from './data/tasks';
-import type { CreateTaskInput, Task } from './types/task';
+import type { CreateTaskInput, Task, TaskStatus } from './types/task';
 
 function createTaskId() {
   return typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `task-${Date.now()}`;
@@ -35,5 +35,11 @@ export function App() {
     return task;
   }
 
-  return <DashboardView tasks={tasks} onCreateTask={handleCreateTask} />;
+  function handleUpdateTaskStatus(taskId: string, status: TaskStatus) {
+    setTasks((currentTasks) =>
+      currentTasks.map((task) => (task.id === taskId ? { ...task, status } : task)),
+    );
+  }
+
+  return <DashboardView tasks={tasks} onCreateTask={handleCreateTask} onUpdateTaskStatus={handleUpdateTaskStatus} />;
 }

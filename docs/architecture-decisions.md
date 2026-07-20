@@ -115,3 +115,13 @@
 - Task intake quality affects every downstream workflow, so validation should guide users instead of only rejecting bad input.
 - Confirmation is reserved for possible data loss, such as clearing an unsaved draft, to avoid unnecessary friction.
 - Documenting interaction design in `docs/ux-interaction-design.md` keeps UX decisions explicit for future iterations.
+
+## ADR 011: Keep status updates in task context
+
+**Decision:** Allow CSMs to update task status from the selected task details panel.
+
+**Why:**
+
+- Status change is a core Customer Success workflow and should not require leaving the dashboard.
+- Placing the control in the details panel keeps the table optimized for scanning while edits happen in context.
+- Inline success feedback confirms the status transition immediately.

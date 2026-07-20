@@ -10,6 +10,7 @@ Help operations, customer success, and delivery teams manage customer-facing wor
 - Understand priority, status, due date, and ownership at a glance.
 - Inspect task/customer context without losing their place.
 - Create new work with minimal friction.
+- Update task status as work progresses.
 
 ## Primary personas
 
@@ -37,6 +38,7 @@ These are intentionally not implemented yet but should be decided before product
 - Authentication and role-based access control.
 - Customer directory and customer selection during task creation.
 - Edit task, delete task, and status transition flows.
+- Status transition permissions and audit history.
 - Due-date rules such as overdue indicators, reminders, and timezone handling.
 - Sorting, pagination, or virtualization for very large queues.
 - Audit history for task creation and status changes.
@@ -60,6 +62,7 @@ These are intentionally not implemented yet but should be decided before product
 - Clear buttons let users recover quickly from search/filter combinations that hide expected tasks.
 - Empty-state copy explains what happened instead of showing a blank table.
 - New tasks clear active controls and become selected automatically so users can confirm the result immediately.
+- Status updates happen in the details panel so CSMs can progress work without losing queue context.
 
 ## Workflow improvements already included
 

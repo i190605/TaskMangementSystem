@@ -25,6 +25,8 @@ The dashboard supports priority, status, and assignee filtering to help teams fo
 
 Selecting a task from the work queue displays its full description, customer information, priority, status, due date, and assignee in a dedicated details panel.
 
+CSMs can update a selected task status directly from the details panel to keep work moving without leaving the dashboard context.
+
 ## Create task
 
 Users can create a new local task with title, description, priority, due date, and assignee. Newly created tasks start in the Open status and appear at the top of the queue.
