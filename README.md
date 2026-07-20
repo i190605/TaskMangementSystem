@@ -33,7 +33,13 @@ Users can create a new local task with title, description, priority, due date, a
 
 **Selected option: C — local JSON data.**
 
-Seed tasks live in `src/data/tasks.json` and are adapted through `src/data/tasks.ts` so the UI still receives typed `Task` objects. This keeps the project deterministic, fast to review, and independent from external API availability while the product workflow is still being shaped.
+| Option | Description | Decision |
+| --- | --- | --- |
+| A | Use a public mock API | Not selected because public mock APIs can be slow, unavailable, or shaped around generic data that does not match this task-management domain. |
+| B | Create a mocked backend | Not selected yet because the current milestone is validating dashboard workflows before committing to API routes, persistence behavior, or backend contracts. |
+| C | Use local JSON data | Selected because it is deterministic, fast to review, domain-specific, and keeps the frontend workflow independent from network availability. |
+
+Seed tasks live in `src/data/tasks.json` and are adapted through `src/data/tasks.ts` so the UI still receives typed `Task` objects. This gives us realistic dashboard data now while preserving a clear migration path to a backend/service layer later.
 
 ## Tech stack
 

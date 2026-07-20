@@ -14,6 +14,14 @@
 
 **Decision:** Use **Option C — local JSON data**. Store seed tasks in `src/data/tasks.json` and expose typed task objects through `src/data/tasks.ts`.
 
+**Options considered:**
+
+| Option | Description | Assessment |
+| --- | --- | --- |
+| A | Use a public mock API | Rejected for this stage. Public mock APIs introduce network dependency, possible downtime, rate limits, and generic schemas that may not represent task-management workflows well. |
+| B | Create a mocked backend | Deferred. A mocked backend is useful once API boundaries, persistence semantics, and integration flows are clearer, but it adds infrastructure before the product workflow is validated. |
+| C | Use local JSON data | Selected. Local JSON is deterministic, domain-specific, easy to review in Git, and keeps iteration speed high while dashboard behavior is still evolving. |
+
 **Why:**
 
 - The requested milestone is a dashboard view, not persistence or backend integration.
