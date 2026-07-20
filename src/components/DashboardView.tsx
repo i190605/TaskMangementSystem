@@ -33,6 +33,19 @@ export function DashboardView({ tasks }: DashboardViewProps) {
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
 
+  const assigneeOptions = useMemo<SelectOption<string>[]>(() => {
+    const uniqueAssignees = Array.from(new Set(tasks.map((task) => task.assignee))).sort((first, second) =>
+      first.localeCompare(second),
+    );
+
+    return [
+      { label: 'All assignees', value: 'All' },
+      ...uniqueAssignees.map((assignee) => ({ label: assignee, value: assignee })),
+    ];
+  }, [tasks]);
+
+  const [assigneeFilter, setAssigneeFilter] = useState('All');
+
   const visibleTasks = useMemo(
     () =>
       tasks.filter(
@@ -40,17 +53,19 @@ export function DashboardView({ tasks }: DashboardViewProps) {
           textIncludesQuery(task.title, titleSearchTerm) &&
           textIncludesQuery(task.customerName, customerSearchTerm) &&
           (priorityFilter === 'All' || task.priority === priorityFilter) &&
-          (statusFilter === 'All' || task.status === statusFilter),
+          (statusFilter === 'All' || task.status === statusFilter) &&
+          (assigneeFilter === 'All' || task.assignee === assigneeFilter),
       ),
-    [customerSearchTerm, priorityFilter, statusFilter, tasks, titleSearchTerm],
+    [assigneeFilter, customerSearchTerm, priorityFilter, statusFilter, tasks, titleSearchTerm],
   );
 
   const hasTitleSearch = titleSearchTerm.trim().length > 0;
   const hasCustomerSearch = customerSearchTerm.trim().length > 0;
   const hasPriorityFilter = priorityFilter !== 'All';
   const hasStatusFilter = statusFilter !== 'All';
+  const hasAssigneeFilter = assigneeFilter !== 'All';
   const hasAnySearch = hasTitleSearch || hasCustomerSearch;
-  const hasAnyControl = hasAnySearch || hasPriorityFilter || hasStatusFilter;
+  const hasAnyControl = hasAnySearch || hasPriorityFilter || hasStatusFilter || hasAssigneeFilter;
   const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
   const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
   const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
@@ -64,6 +79,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
     setCustomerSearchTerm('');
     setPriorityFilter('All');
     setStatusFilter('All');
+    setAssigneeFilter('All');
   }
 
   return (
@@ -95,7 +111,7 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             <h2 id="search-heading">Search tasks</h2>
           </div>
           <p className="search-card__description">
-            Search by task title or customer name, then filter by priority and status to focus the queue around the work that matters most.
+            Search by task title or customer name, then filter by priority, status, and assignee to focus the queue around the work that matters most.
           </p>
         </div>
 
@@ -133,6 +149,14 @@ export function DashboardView({ tasks }: DashboardViewProps) {
             onChange={setStatusFilter}
             options={statusOptions}
             helperText="Focus on work by lifecycle stage."
+          />
+          <FilterSelect
+            id="assignee-filter"
+            label="Assignee"
+            value={assigneeFilter}
+            onChange={setAssigneeFilter}
+            options={assigneeOptions}
+            helperText="Review ownership without changing the task list structure."
           />
         </div>
 

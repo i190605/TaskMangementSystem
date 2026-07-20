@@ -19,7 +19,7 @@ The dashboard supports instant search by task title and customer name so operato
 
 ## Filtering
 
-The dashboard supports priority and status filtering to help teams focus high-urgency work and lifecycle stages while preserving their current search context.
+The dashboard supports priority, status, and assignee filtering to help teams focus high-urgency work, lifecycle stages, and ownership while preserving their current search context.
 
 ## Tech stack
 

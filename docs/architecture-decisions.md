@@ -53,10 +53,11 @@
 
 ## ADR 006: Add filters as composable dashboard controls
 
-**Decision:** Implement priority and status filtering with a reusable `FilterSelect` component and compose filters with existing search predicates.
+**Decision:** Implement priority, status, and assignee filtering with a reusable `FilterSelect` component and compose filters with existing search predicates.
 
 **Why:**
 
 - A reusable select control gives future filters a consistent accessible structure.
-- Priority and status filtering are applied alongside search with predictable `AND` logic.
+- Priority, status, and assignee filtering are applied alongside search with predictable `AND` logic.
+- Assignee options are derived from task data so ownership filters stay current as the task list changes.
 - Keeping filtering local is appropriate while the dashboard uses local fixture data and keeps the interaction instant.
