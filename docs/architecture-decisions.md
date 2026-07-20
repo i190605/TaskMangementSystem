@@ -125,3 +125,13 @@
 - Status change is a core Customer Success workflow and should not require leaving the dashboard.
 - Placing the control in the details panel keeps the table optimized for scanning while edits happen in context.
 - Inline success feedback confirms the status transition immediately.
+
+## ADR 012: Define urgency explicitly for CSM triage
+
+**Decision:** Treat incomplete tasks as urgent when they are high priority, overdue, or due within two days.
+
+**Why:**
+
+- The scenario asks CSMs to quickly identify urgent items, but urgency was ambiguous.
+- Combining priority and due-date proximity reflects common customer success triage behavior.
+- The urgent-only filter and row/detail markers provide both overview and focused workflow support.

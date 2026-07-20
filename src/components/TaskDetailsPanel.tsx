@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Task, TaskStatus } from '../types/task';
 import { formatDisplayDate } from '../utils/date';
+import { getUrgencyReason, isTaskUrgent } from '../utils/urgency';
 import { Badge } from './Badge';
 import { priorityTone, statusTone } from './badgeTones';
 
@@ -35,6 +36,8 @@ export function TaskDetailsPanel({ task, onUpdateStatus }: TaskDetailsPanelProps
     setFeedbackMessage(`Status updated to ${status}.`);
   }
 
+  const isUrgent = isTaskUrgent(task);
+
   return (
     <aside className="details-panel" id="task-detail-panel" aria-labelledby="task-detail-heading" aria-live="polite">
       <div className="details-panel__header">
@@ -43,10 +46,13 @@ export function TaskDetailsPanel({ task, onUpdateStatus }: TaskDetailsPanelProps
           <h2 id="task-detail-heading">{task.title}</h2>
         </div>
         <div className="details-panel__badges" aria-label="Selected task priority and status">
+          {isUrgent ? <span className="badge badge--urgent">Urgent</span> : null}
           <Badge tone={priorityTone[task.priority]}>{task.priority}</Badge>
           <Badge tone={statusTone[task.status]}>{task.status}</Badge>
         </div>
       </div>
+
+      {isUrgent ? <p className="details-panel__urgency">{getUrgencyReason(task)}</p> : null}
 
       <p className="details-panel__description">{task.description}</p>
 

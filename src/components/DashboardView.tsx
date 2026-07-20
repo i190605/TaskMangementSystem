@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { CreateTaskInput, Task, TaskPriority, TaskStatus } from '../types/task';
+import { isTaskUrgent } from '../utils/urgency';
 import { textIncludesQuery } from '../utils/search';
 import { FilterSelect, type SelectOption } from './FilterSelect';
 import { SearchField } from './SearchField';
@@ -37,6 +38,7 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(tasks[0]?.id ?? null);
+  const [showUrgentOnly, setShowUrgentOnly] = useState(false);
 
   const assigneeOptions = useMemo<SelectOption<string>[]>(() => {
     const uniqueAssignees = Array.from(new Set(tasks.map((task) => task.assignee))).sort((first, second) =>
@@ -59,9 +61,10 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
           textIncludesQuery(task.customerName, customerSearchTerm) &&
           (priorityFilter === 'All' || task.priority === priorityFilter) &&
           (statusFilter === 'All' || task.status === statusFilter) &&
-          (assigneeFilter === 'All' || task.assignee === assigneeFilter),
+          (assigneeFilter === 'All' || task.assignee === assigneeFilter) &&
+          (!showUrgentOnly || isTaskUrgent(task)),
       ),
-    [assigneeFilter, customerSearchTerm, priorityFilter, statusFilter, tasks, titleSearchTerm],
+    [assigneeFilter, customerSearchTerm, priorityFilter, showUrgentOnly, statusFilter, tasks, titleSearchTerm],
   );
 
   const hasTitleSearch = titleSearchTerm.trim().length > 0;
@@ -70,11 +73,12 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
   const hasStatusFilter = statusFilter !== 'All';
   const hasAssigneeFilter = assigneeFilter !== 'All';
   const hasAnySearch = hasTitleSearch || hasCustomerSearch;
-  const hasAnyControl = hasAnySearch || hasPriorityFilter || hasStatusFilter || hasAssigneeFilter;
+  const hasAnyControl = hasAnySearch || hasPriorityFilter || hasStatusFilter || hasAssigneeFilter || showUrgentOnly;
   const openTasks = visibleTasks.filter((task) => task.status === 'Open').length;
   const inProgressTasks = visibleTasks.filter((task) => task.status === 'In Progress').length;
   const completedTasks = visibleTasks.filter((task) => task.status === 'Completed').length;
   const highPriorityTasks = tasks.filter((task) => task.priority === 'High').length;
+  const urgentTasks = tasks.filter(isTaskUrgent).length;
   const searchResultSummary = hasAnyControl
     ? `Showing ${visibleTasks.length} of ${tasks.length} tasks matching your search and filters.`
     : `Showing all ${tasks.length} tasks.`;
@@ -86,6 +90,7 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
     setPriorityFilter('All');
     setStatusFilter('All');
     setAssigneeFilter('All');
+    setShowUrgentOnly(false);
   }
 
   function handleCreateTask(input: CreateTaskInput) {
@@ -115,6 +120,7 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
         <StatCard label="Open" value={openTasks} helper="Ready to be picked up" />
         <StatCard label="In Progress" value={inProgressTasks} helper="Currently being handled" />
         <StatCard label="Completed" value={completedTasks} helper="Closed successfully" />
+        <StatCard label="Urgent" value={urgentTasks} helper="High priority, overdue, or due soon" />
       </section>
 
       <TaskCreateForm onCreateTask={handleCreateTask} />
@@ -126,7 +132,7 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
             <h2 id="search-heading">Search tasks</h2>
           </div>
           <p className="search-card__description">
-            Search by task title or customer name, then filter by priority, status, and assignee to focus the queue around the work that matters most.
+            Search by task title or customer name, then filter by priority, status, assignee, and urgency to focus the queue around the work that matters most.
           </p>
         </div>
 
@@ -173,6 +179,18 @@ export function DashboardView({ tasks, onCreateTask, onUpdateTaskStatus }: Dashb
             options={assigneeOptions}
             helperText="Review ownership without changing the task list structure."
           />
+          <label className="urgent-toggle" htmlFor="urgent-only-filter">
+            <input
+              checked={showUrgentOnly}
+              id="urgent-only-filter"
+              onChange={(event) => setShowUrgentOnly(event.target.checked)}
+              type="checkbox"
+            />
+            <span>
+              Urgent only
+              <small>High priority, overdue, or due within 2 days.</small>
+            </span>
+          </label>
         </div>
 
         <p className="search-card__results" aria-live="polite">

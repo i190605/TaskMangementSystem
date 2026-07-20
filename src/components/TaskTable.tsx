@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Task } from '../types/task';
 import { formatDisplayDate } from '../utils/date';
+import { getUrgencyReason, isTaskUrgent } from '../utils/urgency';
 import { Badge } from './Badge';
 import { priorityTone, statusTone } from './badgeTones';
 
@@ -49,9 +50,17 @@ export function TaskTable({
             {tasks.length > 0 ? (
               tasks.map((task) => {
                 const isSelected = task.id === selectedTaskId;
+                const isUrgent = isTaskUrgent(task);
+                const rowClassName = [
+                  'task-row',
+                  isSelected ? 'task-row--selected' : '',
+                  isUrgent ? 'task-row--urgent' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ');
 
                 return (
-                  <tr className={isSelected ? 'task-row task-row--selected' : 'task-row'} key={task.id}>
+                  <tr className={rowClassName} key={task.id}>
                     <td data-label="Task title">
                       {onSelectTask ? (
                         <button
@@ -67,6 +76,7 @@ export function TaskTable({
                       ) : (
                         <strong>{task.title}</strong>
                       )}
+                      {isUrgent ? <span className="urgent-label">{getUrgencyReason(task)}</span> : null}
                     </td>
                     <td data-label="Customer name">{task.customerName}</td>
                     <td data-label="Priority">

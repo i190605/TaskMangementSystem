@@ -11,6 +11,7 @@ Help operations, customer success, and delivery teams manage customer-facing wor
 - Inspect task/customer context without losing their place.
 - Create new work with minimal friction.
 - Update task status as work progresses.
+- Quickly identify urgent customer requests.
 
 ## Primary personas
 
@@ -29,6 +30,7 @@ Help operations, customer success, and delivery teams manage customer-facing wor
 - Customer selection is not part of the create-task requirement, so newly created tasks use explicit unassigned customer metadata.
 - Search and filters should compose with predictable `AND` logic because users generally narrow a queue progressively.
 - The app should remain useful for hundreds of customers by keeping controls simple, responsive, and easy to extend.
+- Urgent work is assumed to mean any incomplete task that is high priority, overdue, or due within two days.
 
 ## Missing requirements identified
 
@@ -63,11 +65,13 @@ These are intentionally not implemented yet but should be decided before product
 - Empty-state copy explains what happened instead of showing a blank table.
 - New tasks clear active controls and become selected automatically so users can confirm the result immediately.
 - Status updates happen in the details panel so CSMs can progress work without losing queue context.
+- Urgent tasks receive both a visual marker and an urgent-only filter so CSMs can triage quickly during busy periods.
 
 ## Workflow improvements already included
 
 - Search by task title and customer name reduces scanning time.
 - Filters by priority, status, and assignee support common triage workflows.
+- Urgent-item highlighting supports rapid triage for high-risk customer work.
 - Details panel avoids navigation and preserves search/filter context.
 - Local JSON data enables deterministic review while the product surface is evolving.
 - Typed task models constrain priority/status values and reduce invalid UI states.
